@@ -1,254 +1,269 @@
 # 🤖 Agentic AI RAG
 
-A Retrieval-Augmented Generation (RAG) application that allows users to ask questions about an **Agentic AI ebook** using OpenAI embeddings, Pinecone vector search, GPT-4.1-mini, and a Streamlit chat interface.
+> **A Retrieval-Augmented Generation (RAG) application for asking questions about Agentic AI documents using OpenAI, Pinecone, LangChain, and Streamlit.**
 
-The application follows this pipeline:
+[![Live Demo](https://img.shields.io/badge/🚀%20Live%20Demo-Streamlit-red?style=for-the-badge)](https://agentic-ai-rag-ijwruixzhbygnjnntwm6uw.streamlit.app/)
+[![Python](https://img.shields.io/badge/Python-3.x-blue?style=flat-square\&logo=python)](https://www.python.org/)
+[![Streamlit](https://img.shields.io/badge/Streamlit-App-FF4B4B?style=flat-square\&logo=streamlit)](https://streamlit.io/)
+[![OpenAI](https://img.shields.io/badge/OpenAI-API-black?style=flat-square\&logo=openai)](https://openai.com/)
+[![Pinecone](https://img.shields.io/badge/Pinecone-Vector%20DB-green?style=flat-square)](https://www.pinecone.io/)
+[![LangChain](https://img.shields.io/badge/LangChain-RAG-blue?style=flat-square)](https://www.langchain.com/)
+
+---
+
+## 🚀 Live Demo
+
+### 👉 [Open Agentic AI RAG](https://agentic-ai-rag-ijwruixzhbygnjnntwm6uw.streamlit.app/)
+
+You can directly open the deployed application and interact with the RAG chatbot.
+
+The application allows users to ask questions and receive answers based on information retrieved from the indexed Agentic AI document.
+
+---
+
+# 📌 About the Project
+
+**Agentic AI RAG** is a document-grounded question-answering application built using the **Retrieval-Augmented Generation (RAG)** architecture.
+
+Instead of sending a user's question directly to an LLM, the application first searches a vector database for relevant information from the source document.
+
+The retrieved information is then provided to the language model as context to generate a grounded response.
+
+### Core architecture
 
 ```text
-PDF Document
-     │
-     ▼
-Text Extraction
-     │
-     ▼
-Text Chunking
-     │
-     ▼
-OpenAI Embeddings
-text-embedding-3-small
-     │
-     ▼
-1536-dimensional vectors
-     │
-     ▼
-Pinecone Vector Database
-     │
-     ▼
-Semantic Retrieval
-     │
-     ▼
-Relevant Context
-     │
-     ▼
-GPT-4.1-mini
-     │
-     ▼
-Final Answer
-     │
-     ▼
-Streamlit UI
+                    User
+                     │
+                     ▼
+              Streamlit Chat UI
+                     │
+                     ▼
+                User Query
+                     │
+                     ▼
+          OpenAI Embedding Model
+          text-embedding-3-small
+                     │
+                     ▼
+              1536-D Vector
+                     │
+                     ▼
+             Pinecone Search
+                     │
+                     ▼
+             Top-K Relevant Chunks
+                     │
+                     ▼
+              Retrieved Context
+                     │
+                     ▼
+                GPT-4.1-mini
+                     │
+                     ▼
+              Generated Response
+                     │
+                     ▼
+              Streamlit UI
 ```
 
 ---
 
-## 📌 Features
+# ✨ Features
 
-* PDF document ingestion
-* Page-level text extraction
-* Recursive text chunking
-* OpenAI `text-embedding-3-small` embeddings
-* 1536-dimensional vector embeddings
-* Pinecone vector database
-* Semantic similarity search
-* Top-K document retrieval
-* GPT-4.1-mini response generation
-* Source/page references
-* Streamlit chat interface
-* Conversation history during the current session
-* Clear chat functionality
-* Configurable chunk size and overlap
-* Configurable retrieval count
+* 📄 PDF document ingestion
+* 🔍 Semantic document search
+* 🧩 Recursive text chunking
+* 🧠 OpenAI embeddings
+* 🗄️ Pinecone vector database
+* 🤖 GPT-4.1-mini generation
+* 📚 Context-grounded answers
+* 📌 Source/page metadata
+* 💬 Streamlit chat interface
+* 🔢 Top-K retrieval
+* ⚡ Fast semantic retrieval
+* ☁️ Live Streamlit deployment
+* 🔐 Environment-based API key configuration
+
+---
+
+# 🛠️ Tech Stack
+
+| Technology                 | Purpose                          |
+| -------------------------- | -------------------------------- |
+| **Python**                 | Core programming language        |
+| **Streamlit**              | Web application and chat UI      |
+| **OpenAI**                 | Embeddings and LLM               |
+| **GPT-4.1-mini**           | Response generation              |
+| **text-embedding-3-small** | Text embeddings                  |
+| **Pinecone**               | Vector database                  |
+| **LangChain**              | Text splitting and RAG utilities |
+| **PyPDF**                  | PDF text extraction              |
+| **python-dotenv**          | Environment configuration        |
+
+---
+
+# 🧠 RAG Pipeline
+
+The application follows a standard Retrieval-Augmented Generation pipeline.
+
+## 1. Document ingestion
+
+The source PDF is loaded using `PyPDF`.
+
+```text
+PDF
+ │
+ ▼
+Page-by-page text extraction
+```
+
+---
+
+## 2. Text chunking
+
+The extracted text is divided into smaller chunks using a recursive character text splitter.
+
+Current configuration:
+
+```text
+Chunk size:     900
+Chunk overlap:  150
+```
+
+This helps maintain contextual continuity between neighboring chunks.
+
+---
+
+## 3. Embedding generation
+
+Each chunk is converted into a vector using:
+
+```text
+text-embedding-3-small
+```
+
+The vectors generated by this model are:
+
+```text
+1536 dimensions
+```
+
+---
+
+## 4. Vector storage
+
+The embeddings are stored in Pinecone.
+
+```text
+Pinecone Index
+    │
+    ├── Vector
+    ├── Text
+    ├── Page
+    ├── Chunk
+    └── Source
+```
+
+The application uses cosine similarity for semantic search.
+
+---
+
+## 5. Query embedding
+
+When a user asks a question, the question is converted into an embedding using the same embedding model.
+
+```text
+User Question
+      │
+      ▼
+text-embedding-3-small
+      │
+      ▼
+1536-dimensional vector
+```
+
+---
+
+## 6. Semantic retrieval
+
+The query vector is sent to Pinecone.
+
+The application retrieves the most relevant chunks.
+
+Current configuration:
+
+```text
+TOP_K = 5
+```
+
+---
+
+## 7. Context generation
+
+The retrieved chunks are combined into context.
+
+```text
+Question
+   +
+Retrieved Context
+   ↓
+LLM
+```
+
+---
+
+## 8. Answer generation
+
+The context is passed to:
+
+```text
+GPT-4.1-mini
+```
+
+The generated response is displayed through the Streamlit interface.
 
 ---
 
 # 🏗️ Project Structure
 
 ```text
-D:\agentic-ai-rag
+agentic-ai-rag/
 │
-├── .env
-├── .gitignore
-├── README.md
-├── config.py
 ├── app.py
+├── config.py
+├── README.md
+├── requirements.txt
+├── .env.example
+├── .gitignore
 │
-├── data
+├── data/
 │   └── Ebook-Agentic-AI.pdf
 │
-├── src
-│   ├── ingest.py
-│   ├── retrieve.py
-│   └── rag.py
-│
-└── .venv
+└── src/
+    ├── ingest.py
+    ├── retrieve.py
+    └── rag.py
 ```
 
-### File Responsibilities
+### File descriptions
 
-| File                        | Purpose                                                                      |
-| --------------------------- | ---------------------------------------------------------------------------- |
-| `app.py`                    | Streamlit web application                                                    |
-| `config.py`                 | Environment variables and application configuration                          |
-| `src/ingest.py`             | Extracts PDF text, creates chunks, generates embeddings, and uploads vectors |
-| `src/retrieve.py`           | Tests semantic retrieval from Pinecone                                       |
-| `src/rag.py`                | Command-line RAG chatbot                                                     |
-| `.env`                      | API keys and environment configuration                                       |
-| `data/Ebook-Agentic-AI.pdf` | Source document                                                              |
-| `README.md`                 | Project documentation                                                        |
+| File               | Description                         |
+| ------------------ | ----------------------------------- |
+| `app.py`           | Streamlit application               |
+| `config.py`        | Application configuration           |
+| `src/ingest.py`    | PDF ingestion and Pinecone indexing |
+| `src/retrieve.py`  | Semantic retrieval testing          |
+| `src/rag.py`       | RAG question-answering logic        |
+| `requirements.txt` | Python dependencies                 |
+| `.env.example`     | Environment variable template       |
+| `.gitignore`       | Git exclusions                      |
+| `README.md`        | Project documentation               |
 
 ---
 
-# ⚙️ Technologies Used
+# ⚙️ Configuration
 
-* Python
-* Streamlit
-* OpenAI
-* LangChain
-* Pinecone
-* PyPDF
-* Recursive Character Text Splitter
-* python-dotenv
-
----
-
-# 🔑 Models
-
-## Embedding Model
-
-```text
-text-embedding-3-small
-```
-
-Embedding dimension:
-
-```text
-1536
-```
-
-## LLM
-
-```text
-gpt-4.1-mini
-```
-
----
-
-# 🗄️ Pinecone Configuration
-
-The application uses:
-
-```text
-Index:
-agentic-ai-rag-1536
-```
-
-Vector dimension:
-
-```text
-1536
-```
-
-Metric:
-
-```text
-cosine
-```
-
-Namespace:
-
-```text
-agentic-ai
-```
-
----
-
-# 🐍 1. Create the Virtual Environment
-
-From the project directory:
-
-```powershell
-cd D:\agentic-ai-rag
-```
-
-Create the virtual environment:
-
-```powershell
-python -m venv .venv
-```
-
-Activate it:
-
-```powershell
-.\.venv\Scripts\Activate.ps1
-```
-
-You should see:
-
-```text
-(.venv) PS D:\agentic-ai-rag>
-```
-
----
-
-# 📦 2. Install Dependencies
-
-Install the required packages:
-
-```powershell
-pip install openai langchain langchain-openai langchain-text-splitters pypdf pinecone python-dotenv streamlit
-```
-
-You can verify Streamlit:
-
-```powershell
-streamlit --version
-```
-
----
-
-# 🔐 3. Configure Environment Variables
-
-Create:
-
-```text
-D:\agentic-ai-rag\.env
-```
-
-Add:
-
-```env
-OPENAI_API_KEY=your_openai_api_key
-PINECONE_API_KEY=your_pinecone_api_key
-PINECONE_INDEX_NAME=agentic-ai-rag-1536
-```
-
-Replace:
-
-```text
-your_openai_api_key
-```
-
-and:
-
-```text
-your_pinecone_api_key
-```
-
-with your actual API keys.
-
-Do not commit `.env` to GitHub.
-
----
-
-# ⚙️ 4. Configuration
-
-The project uses:
-
-```text
-config.py
-```
-
-Current configuration:
+The project uses the following core configuration:
 
 ```python
 EMBEDDING_MODEL = "text-embedding-3-small"
@@ -262,76 +277,152 @@ CHUNK_OVERLAP = 150
 TOP_K = 5
 ```
 
-### Chunk Configuration
+---
+
+# 🗄️ Pinecone Configuration
+
+The Pinecone index is configured for the embedding model used by the application.
 
 ```text
-Chunk size:
-900 characters
+Index:
+agentic-ai-rag-1536
 
-Chunk overlap:
-150 characters
+Dimension:
+1536
+
+Metric:
+cosine
+
+Namespace:
+agentic-ai
 ```
 
-### Retrieval Configuration
+### Why 1536 dimensions?
+
+The project uses:
 
 ```text
-Top K:
-5
+text-embedding-3-small
 ```
 
-This means the system retrieves the five most relevant chunks from Pinecone for each question.
+which generates 1536-dimensional embeddings.
+
+Therefore, the Pinecone index must use the same vector dimension.
 
 ---
 
-# 📄 5. Add the PDF
+# 💻 Run Locally
 
-Place the source document here:
+## 1. Clone the repository
 
-```text
-D:\agentic-ai-rag\data\Ebook-Agentic-AI.pdf
+```bash
+git clone https://github.com/Manikanta9391235355/agentic-ai-rag.git
 ```
 
-The ingestion script automatically looks for:
+Move into the project:
+
+```bash
+cd agentic-ai-rag
+```
+
+---
+
+## 2. Create a virtual environment
+
+### Windows
+
+```powershell
+python -m venv .venv
+```
+
+Activate it:
+
+```powershell
+.\.venv\Scripts\Activate.ps1
+```
+
+---
+
+## 3. Install dependencies
+
+```powershell
+pip install -r requirements.txt
+```
+
+---
+
+# 🔐 Environment Variables
+
+Create a `.env` file in the project root.
+
+```text
+agentic-ai-rag/
+└── .env
+```
+
+Add:
+
+```env
+OPENAI_API_KEY=your_openai_api_key
+PINECONE_API_KEY=your_pinecone_api_key
+PINECONE_INDEX_NAME=agentic-ai-rag-1536
+```
+
+### Important
+
+Never commit `.env` to GitHub.
+
+The repository contains:
+
+```text
+.env.example
+```
+
+as a template.
+
+---
+
+# 📄 Source Document
+
+The source PDF is intentionally excluded from the public GitHub repository.
+
+If you have the appropriate rights to use the source document, place it locally at:
 
 ```text
 data/Ebook-Agentic-AI.pdf
 ```
 
+The ingestion script expects this path.
+
 ---
 
-# 📥 6. Ingest the PDF
+# 📥 Ingest the Document
 
-Run:
+After adding the PDF, run:
 
 ```powershell
 python src/ingest.py
 ```
 
-The ingestion process performs:
+The ingestion process:
 
 ```text
 PDF
  ↓
-Extract pages
+Extract text
  ↓
-Create text chunks
+Create chunks
  ↓
 Generate embeddings
  ↓
-Upload vectors to Pinecone
+Upload vectors
+ ↓
+Pinecone
 ```
 
-Expected output:
+Example output:
 
 ```text
-AGENTIC AI RAG - DOCUMENT INGESTION
-
-PDF: D:\agentic-ai-rag\data\Ebook-Agentic-AI.pdf
-Embedding model: text-embedding-3-small
-Embedding dimension: 1536
-Pinecone index: agentic-ai-rag-1536
-Namespace: agentic-ai
-
 Extracted 59 pages.
 Created 128 chunks.
 
@@ -347,416 +438,102 @@ Uploaded 128/128
 Ingestion completed successfully.
 ```
 
-The exact number of pages/chunks can change if the PDF is replaced.
+The exact page and chunk counts depend on the source document.
 
 ---
 
-# 🔎 7. Test Semantic Retrieval
+# 🔎 Test Retrieval
 
-After successful ingestion, run:
+Run:
 
 ```powershell
 python src/retrieve.py
 ```
 
-The application will ask:
-
-```text
-Enter your question:
-```
-
 Example:
 
 ```text
+Enter your question:
 What is Agentic AI?
 ```
 
-The system will:
-
-```text
-Question
-   ↓
-Generate query embedding
-   ↓
-Search Pinecone
-   ↓
-Retrieve Top 5 chunks
-   ↓
-Display matching content
-```
-
-The output should contain:
-
-```text
-Result 1
-
-Score: ...
-Page: ...
-Chunk: ...
-
-Relevant text...
-```
+The retrieval system searches Pinecone and returns the most relevant document chunks.
 
 ---
 
-# 🧠 8. Run the Command-Line RAG Application
+# 🤖 Run the RAG Application
 
-Run:
+For command-line testing:
 
 ```powershell
 python src/rag.py
 ```
 
-You should see:
+You can then ask questions about the indexed document.
 
-```text
-============================================================
-AGENTIC AI RAG CHATBOT
-============================================================
-
-You:
-```
-
-Ask a question:
+Example:
 
 ```text
 You: What is Agentic AI?
 ```
 
-The system performs:
-
-```text
-Question
-    ↓
-Embedding
-    ↓
-Pinecone Retrieval
-    ↓
-Relevant Context
-    ↓
-GPT-4.1-mini
-    ↓
-Answer
-```
-
-To exit:
-
-```text
-exit
-```
-
-or:
-
-```text
-quit
-```
-
 ---
 
-# 🖥️ 9. Run the Streamlit Application
+# 🖥️ Run the Streamlit Application
 
-The main user interface is the Streamlit application.
-
-Run:
+Start the application with:
 
 ```powershell
 python -m streamlit run app.py
 ```
 
-Streamlit will start a local server.
-
-Typically the application will be available at:
+The local application will normally be available at:
 
 ```text
 http://localhost:8501
 ```
 
-Open the address in your browser if it does not open automatically.
+---
+
+# ☁️ Live Deployment
+
+The project is deployed using Streamlit.
+
+### Production application
+
+🚀 **[Launch Agentic AI RAG](https://agentic-ai-rag-ijwruixzhbygnjnntwm6uw.streamlit.app/)**
+
+Deployment configuration requires the appropriate secrets/environment variables:
+
+```text
+OPENAI_API_KEY
+PINECONE_API_KEY
+PINECONE_INDEX_NAME
+```
+
+API keys should be configured through the deployment platform's secret management rather than committed to source control.
 
 ---
 
-# 💬 10. Using the Streamlit Application
+# 🔒 Security
 
-The interface provides a chat-based RAG experience.
-
-Example:
+The following files should never be committed:
 
 ```text
-User:
-What is Agentic AI?
-
-Assistant:
-[Generated answer based on the retrieved ebook content]
-
-📚 Sources
-
-Source 1
-Page: 5
-Relevance score: 0.82
-
-[Retrieved text]
+.env
+.venv/
+*.pyc
+__pycache__/
+.streamlit/secrets.toml
 ```
 
-The application displays retrieved sources so that the user can inspect which sections of the ebook were used.
+API keys should always be stored as environment variables or deployment secrets.
 
 ---
 
-# 🔄 RAG Workflow
+# ⚠️ Common Issues
 
-The complete application works as follows:
-
-```text
-                    USER
-                     │
-                     ▼
-             Streamlit Chat UI
-                     │
-                     ▼
-               User Question
-                     │
-                     ▼
-          OpenAI Embedding Model
-        text-embedding-3-small
-                     │
-                     ▼
-              1536-D Vector
-                     │
-                     ▼
-               Pinecone
-                     │
-             Similarity Search
-                     │
-                     ▼
-                Top 5 Chunks
-                     │
-                     ▼
-              Retrieved Context
-                     │
-                     ▼
-                GPT-4.1-mini
-                     │
-                     ▼
-              Generated Answer
-                     │
-                     ▼
-             Streamlit Interface
-```
-
----
-
-# 🧩 Why Pinecone Uses 1536 Dimensions
-
-The embedding model used by this project is:
-
-```text
-text-embedding-3-small
-```
-
-The generated embeddings contain:
-
-```text
-1536 dimensions
-```
-
-Therefore the Pinecone index must also have:
-
-```text
-dimension = 1536
-```
-
-The index configuration must match the embedding dimension.
-
----
-
-# ⚠️ Previous Dimension Error
-
-An earlier Pinecone index was configured with:
-
-```text
-Dimension: 1024
-```
-
-while the OpenAI embedding model generated:
-
-```text
-1536 dimensions
-```
-
-This caused:
-
-```text
-Vector dimension 1536 does not match the dimension of the index 1024
-```
-
-The solution was to use a new Pinecone index:
-
-```text
-agentic-ai-rag-1536
-```
-
-with:
-
-```text
-Dimension: 1536
-```
-
-The current project should use:
-
-```env
-PINECONE_INDEX_NAME=agentic-ai-rag-1536
-```
-
----
-
-# 🧪 Testing Checklist
-
-After setup, test the system in this order.
-
-## Test 1 — Environment
-
-```powershell
-python -c "import config; print(config.__file__)"
-```
-
-Expected:
-
-```text
-D:\agentic-ai-rag\config.py
-```
-
----
-
-## Test 2 — Ingestion
-
-```powershell
-python src/ingest.py
-```
-
-Expected:
-
-```text
-Ingestion completed successfully.
-```
-
----
-
-## Test 3 — Retrieval
-
-```powershell
-python src/retrieve.py
-```
-
-Ask:
-
-```text
-What is Agentic AI?
-```
-
-Verify that relevant chunks are returned.
-
----
-
-## Test 4 — RAG
-
-```powershell
-python src/rag.py
-```
-
-Ask a question about the ebook.
-
-Verify that GPT generates an answer based on retrieved context.
-
----
-
-## Test 5 — Streamlit
-
-```powershell
-python -m streamlit run app.py
-```
-
-Open:
-
-```text
-http://localhost:8501
-```
-
-Ask questions through the web interface.
-
----
-
-# 🧯 Troubleshooting
-
-## `ModuleNotFoundError: No module named 'config'`
-
-Make sure the project has:
-
-```text
-D:\agentic-ai-rag\config.py
-```
-
-and not only:
-
-```text
-D:\agentic-ai-rag\src\config.py
-```
-
-Correct structure:
-
-```text
-D:\agentic-ai-rag
-├── app.py
-├── config.py
-└── src
-    ├── ingest.py
-    ├── retrieve.py
-    └── rag.py
-```
-
-Test:
-
-```powershell
-Test-Path .\config.py
-```
-
-Expected:
-
-```text
-True
-```
-
----
-
-## `OPENAI_API_KEY is missing`
-
-Check `.env`:
-
-```text
-D:\agentic-ai-rag\.env
-```
-
-Make sure:
-
-```env
-OPENAI_API_KEY=your_key
-```
-
-is present.
-
-Restart the terminal after changing environment configuration if necessary.
-
----
-
-## `PINECONE_API_KEY is missing`
-
-Make sure `.env` contains:
-
-```env
-PINECONE_API_KEY=your_key
-```
-
----
-
-## Vector Dimension Error
+## Pinecone dimension mismatch
 
 If you see:
 
@@ -764,218 +541,157 @@ If you see:
 Vector dimension 1536 does not match the dimension of the index 1024
 ```
 
-verify that `.env` points to:
+the Pinecone index dimension does not match the embedding model.
 
-```env
-PINECONE_INDEX_NAME=agentic-ai-rag-1536
-```
-
-and that the Pinecone index has:
+For this project:
 
 ```text
-Dimension: 1536
+Embedding model:
+text-embedding-3-small
+
+Embedding dimension:
+1536
+
+Pinecone dimension:
+1536
 ```
 
 ---
 
-## Streamlit Command Not Found
+## `ModuleNotFoundError: No module named 'config'`
 
-Instead of:
+Make sure the project structure contains:
+
+```text
+agentic-ai-rag/
+├── app.py
+├── config.py
+└── src/
+```
+
+`config.py` should be in the project root.
+
+---
+
+## Streamlit command not found
+
+Use:
+
+```powershell
+python -m streamlit run app.py
+```
+
+instead of:
 
 ```powershell
 streamlit run app.py
 ```
 
-use:
-
-```powershell
-python -m streamlit run app.py
-```
-
 ---
 
-## Pinecone Index Not Found
-
-Check:
-
-```env
-PINECONE_INDEX_NAME=agentic-ai-rag-1536
-```
-
-Then verify that the index exists in your Pinecone project.
-
----
-
-# 🔒 Security
-
-Never commit API keys to GitHub.
-
-Your `.gitignore` should contain:
-
-```gitignore
-.venv/
-.env
-__pycache__/
-*.pyc
-.streamlit/secrets.toml
-```
-
-Never place API keys directly inside:
-
-```text
-app.py
-config.py
-ingest.py
-retrieve.py
-rag.py
-```
-
-Use `.env` instead.
-
----
-
-# 🚀 Running the Project From Scratch
-
-After cloning or copying the project:
-
-```powershell
-cd D:\agentic-ai-rag
-```
-
-Activate the virtual environment:
-
-```powershell
-.\.venv\Scripts\Activate.ps1
-```
-
-Install dependencies:
-
-```powershell
-pip install openai langchain langchain-openai langchain-text-splitters pypdf pinecone python-dotenv streamlit
-```
-
-Configure `.env`:
-
-```env
-OPENAI_API_KEY=your_openai_api_key
-PINECONE_API_KEY=your_pinecone_api_key
-PINECONE_INDEX_NAME=agentic-ai-rag-1536
-```
-
-Place the PDF:
-
-```text
-data/Ebook-Agentic-AI.pdf
-```
-
-Run ingestion:
-
-```powershell
-python src/ingest.py
-```
-
-Test retrieval:
-
-```powershell
-python src/retrieve.py
-```
-
-Run the RAG CLI:
-
-```powershell
-python src/rag.py
-```
-
-Run the web application:
-
-```powershell
-python -m streamlit run app.py
-```
-
----
-
-# 📈 Future Improvements
-
-Potential improvements for the next versions include:
-
-* Conversation-aware retrieval
-* Chat history summarization
-* Hybrid search
-* Metadata filtering
-* Reranking retrieved chunks
-* Better citation handling
-* Streaming LLM responses
-* Document upload through Streamlit
-* Multiple PDF support
-* Multiple namespaces
-* Authentication
-* Persistent chat history
-* Evaluation datasets
-* Retrieval quality metrics
-* RAG evaluation with precision/recall
-* LangGraph-based agentic workflows
-* Query rewriting
-* Context compression
-* Multi-step agentic retrieval
-* Web search fallback
-* Source confidence scoring
-* Deployment to Streamlit Community Cloud or another hosting platform
-
----
-
-# 🎯 Current Project Status
+# 📊 Current Project Status
 
 ```text
 ✅ PDF extraction
 ✅ Page-level text extraction
-✅ Text chunking
+✅ Recursive text chunking
 ✅ OpenAI embeddings
 ✅ 1536-dimensional embeddings
 ✅ Pinecone vector storage
 ✅ Semantic retrieval
-✅ GPT-based answer generation
-✅ Source metadata
-✅ CLI RAG application
-✅ Streamlit chat interface
-```
-
-The core RAG pipeline is:
-
-```text
-PDF
- ↓
-Chunking
- ↓
-Embedding
- ↓
-Pinecone
- ↓
-Retrieval
- ↓
-Context
- ↓
-GPT-4.1-mini
- ↓
-Streamlit
+✅ Top-K retrieval
+✅ GPT-4.1-mini generation
+✅ RAG pipeline
+✅ Streamlit interface
+✅ Live Streamlit deployment
+✅ GitHub repository
 ```
 
 ---
 
-# 👨‍💻 Project
+# 🚀 Future Improvements
 
-**Agentic AI RAG**
+Potential future improvements include:
 
-A document-grounded AI question-answering system built with:
+* [ ] Conversation memory
+* [ ] Streaming LLM responses
+* [ ] Better source citations
+* [ ] Multiple document support
+* [ ] Document upload from Streamlit
+* [ ] Metadata filtering
+* [ ] Hybrid search
+* [ ] Reranking
+* [ ] Query rewriting
+* [ ] Context compression
+* [ ] RAG evaluation
+* [ ] Retrieval quality metrics
+* [ ] Multi-step agentic retrieval
+* [ ] LangGraph-based agent workflows
+* [ ] Web search fallback
+* [ ] User authentication
+* [ ] Persistent chat history
+
+---
+
+# 🎯 Why This Project?
+
+This project demonstrates the practical implementation of a production-oriented RAG pipeline:
 
 ```text
-Python
-OpenAI
-LangChain
-Pinecone
-Streamlit
+Document Processing
+        ↓
+Embeddings
+        ↓
+Vector Database
+        ↓
+Semantic Retrieval
+        ↓
+Context Construction
+        ↓
+LLM Generation
+        ↓
+Interactive Application
+        ↓
+Cloud Deployment
 ```
 
-The system is designed to answer questions using information retrieved from the provided Agentic AI ebook rather than relying solely on the language model's general knowledge.
-#   a g e n t i c - a i - r a g 
- 
- 
+It demonstrates experience with:
+
+* AI/LLM application development
+* RAG architecture
+* Vector databases
+* Semantic search
+* Prompt/context construction
+* API integration
+* Python backend development
+* Streamlit application development
+* Cloud deployment
+* Environment and secret management
+
+---
+
+# 👨‍💻 Author
+
+**Manikanta Galipalli**
+
+AI Automation Engineer | AI / GenAI Developer
+
+---
+
+# ⭐ Live Project
+
+## 🚀 Try the application
+
+### [Open Agentic AI RAG →](https://agentic-ai-rag-ijwruixzhbygnjnntwm6uw.streamlit.app/)
+
+If you find the project useful, consider giving the repository a ⭐ on GitHub.
+
+---
+
+## 📌 Repository
+
+**GitHub:**
+https://github.com/Manikanta9391235355/agentic-ai-rag
+
+**Live Demo:**
+https://agentic-ai-rag-ijwruixzhbygnjnntwm6uw.streamlit.app/
